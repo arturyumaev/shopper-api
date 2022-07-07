@@ -1,6 +1,7 @@
 .PHONY: default
 
-image_name = shopper-api
+tag = shopper-api
+image_name = arturyumaev/private:$(tag)
 
 default: build run
 
