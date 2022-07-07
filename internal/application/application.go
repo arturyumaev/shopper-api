@@ -23,7 +23,7 @@ func (app *application) Run() {
 		c.JSON(http.StatusOK, "pong")
 	})
 
-	r.Run(fmt.Sprintf("%s:%s", app.config.Server.Host, app.config.Server.Port))
+	r.Run(fmt.Sprintf(":%s", app.config.Server.Port))
 }
 
 func NewApplication(config *models.Config) IApplication {

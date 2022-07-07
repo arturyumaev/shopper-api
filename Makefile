@@ -1,5 +1,11 @@
-build:
-	go mod download && go build -o ./bin/shopper ./cmd/shopper/shopper.go
+.PHONY: default
 
-run: build
-	./bin/shopper -config ./config/config.yaml
+image_name = shopper-api
+
+default: build run
+
+build:
+	docker build -t $(image_name) .
+
+run:
+	docker run --publish 8888:8080 $(image_name)
