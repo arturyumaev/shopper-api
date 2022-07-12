@@ -6,6 +6,6 @@ spec:
   selector:
     app: shopper-api
   ports:
-    - port: 9000
+    - port: 8080
       targetPort: 8080
-  type: ClusterIP
+  type: NodePort
