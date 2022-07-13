@@ -10,34 +10,27 @@
 $ minikube start --memory=4096 --driver=virtualbox
 ```
 
-Установить nginx ingress controller через minikube, он установится в namespace `ingress-nginx`
+Перейти в директорию `./k8s/` и установить ingress controller через `helm` (заранее установить `helm`, если не установлен)
 
 ```
-$ minikube addons enable ingress
+$ kubectl create namespace m
+$ helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx/
+$ helm repo update
+$ helm install nginx ingress-nginx/ingress-nginx --namespace m -f nginx-ingress.yaml
 ```
 
-Проверить, что под с ingress контроллером запустился
+Применить манифесты
 
 ```
-$ kubectl get pods -n ingress-nginx
+$ kubectl apply -f deployment.yaml
+$ kubectl apply -f service.yaml
+$ kubectl apply -f ingress.yaml
 ```
 
-Перейти в директорию `/k8s` в проекте и раскатить манифесты сервиса командой:
+Получить `ip` кластера в `minikube`:
 
 ```
-$ kubectl apply -f .
-```
-
-Дождаться запуска подов:
-
-```
-$ kubectl get pods --watch
-```
-
-Дождаться получения `ip` в поле `ADDRESS` у ингресса
-
-```
-$ kubectl get ing shopper-api-ingress --watch
+$ minikube ip
 ```
 
 После получения `ip` добавить следующую строчку в конец файла `/etc/hosts/` (`<ip>` заменить на полученный `ip`):
@@ -46,8 +39,15 @@ $ kubectl get ing shopper-api-ingress --watch
 <ip> arch.homework
 ```
 
-Проверить доступность сервиса запросом:
+Проверить доступность сервиса запросом и добавить необходимый путь:
 
 ```
 $ curl arch.homework
 ```
+
+### Полезные ссылки
+
+https://kubernetes.github.io/ingress-nginx/
+
+https://kubernetes.github.io/ingress-nginx/user-guide/basic-usage/
+
