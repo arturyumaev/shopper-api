@@ -6,7 +6,7 @@ spec:
   selector:
     app: shopper-api
   ports:
-    - port: 8080
+    - port: 80 # Ingress traffic port
       protocol: TCP
-      targetPort: 8080
+      targetPort: 8080 # Container application port
   type: NodePort
