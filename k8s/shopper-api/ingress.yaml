@@ -2,6 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: shopper-api-ingress
+  namespace: shopper-api
 spec:
   ingressClassName: nginx
   rules:

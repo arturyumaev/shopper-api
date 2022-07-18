@@ -38,5 +38,7 @@ func main() {
 
 	app := application.NewApplication(config)
 
-	app.Run()
+	if err = app.Run(); err != nil {
+		log.Fatal(err)
+	}
 }
