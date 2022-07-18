@@ -1,48 +1,45 @@
 # shopper-api
 
-Для запуска на MacOS с драйвером `virtualbox` я использовал [minikube](https://minikube.sigs.k8s.io/docs/start/) и [virtualbox](https://www.virtualbox.org/wiki/Downloads).
+### Запуск приложения локально
+
+```shell
+./run_local.sh
+```
 
 ### Сборка в kubernetes кластере
 
-Запустить minikube с драйвером `virtualbox` командой
+Для запуска на MacOS с драйвером `virtualbox` я использовал [minikube](https://minikube.sigs.k8s.io/docs/start/) и [virtualbox](https://www.virtualbox.org/wiki/Downloads).
 
-```
-$ minikube start --memory=4096 --driver=virtualbox
-```
+Установить [helm](https://helm.sh/), если он не был установлен. Запустить minikube с драйвером `virtualbox` командой
 
-Перейти в директорию `./k8s/` и установить ingress controller через `helm` (заранее установить `helm`, если не установлен)
-
-```
-$ kubectl create namespace m
-$ helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx/
-$ helm repo update
-$ helm install nginx ingress-nginx/ingress-nginx --namespace m -f nginx-ingress.yaml
+```shell
+minikube start --memory=4096 --driver=virtualbox
 ```
 
-Применить манифесты
+### Загрузка манифестов и запуск приложения в кластере
 
-```
-$ kubectl apply -f deployment.yaml
-$ kubectl apply -f service.yaml
-$ kubectl apply -f ingress.yaml
+Перейти в директорию `./k8s/` и запустить скрипт
+
+```shell
+cd ./k8s && ./apply.sh
 ```
 
 Получить `ip` кластера в `minikube`:
 
-```
-$ minikube ip
+```shell
+minikube ip
 ```
 
 После получения `ip` добавить следующую строчку в конец файла `/etc/hosts/` (`<ip>` заменить на полученный `ip`):
 
-```
+```shell
 <ip> arch.homework
 ```
 
-Проверить доступность сервиса запросом и добавить необходимый путь:
+Проверить доступность сервиса:
 
-```
-$ curl arch.homework
+```shell
+curl arch.homework/health
 ```
 
 ### Полезные ссылки
