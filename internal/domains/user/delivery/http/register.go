@@ -1,23 +1,20 @@
 package http
 
 import (
+	"github.com/arturyumaev/shopper-api/internal/domains/user"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
-func test(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"status": "OK",
-	})
-}
+func RegisterHTTPEndpoints(router *gin.Engine, uc user.UseCase) {
+	h := NewHandler(uc)
 
-func RegisterHTTPEndpoints(router *gin.Engine) {
 	userEndpoints := router.Group("/users")
+
 	{
-		userEndpoints.POST("/", test)
-		userEndpoints.GET("/", test)
-		userEndpoints.GET("/:id", test)
-		userEndpoints.PUT("/:id", test)
-		userEndpoints.DELETE("/:id", test)
+		userEndpoints.POST("/", h.CreateUser)
+		userEndpoints.GET("/", h.GetUsers)
+		userEndpoints.GET("/:id", h.GetUser)
+		userEndpoints.PUT("/:id", h.UpdateUser)
+		userEndpoints.DELETE("/:id", h.DeleteUser)
 	}
 }

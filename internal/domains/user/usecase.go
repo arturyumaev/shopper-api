@@ -2,11 +2,10 @@ package user
 
 import (
 	"context"
-
 	"github.com/arturyumaev/shopper-api/models"
 )
 
-type Repository interface {
+type UseCase interface {
 	CreateUser(ctx context.Context, user *models.User) error
 	GetUser(ctx context.Context, userId string) (*models.User, error)
 	GetUsers(ctx context.Context) ([]*models.User, error)
