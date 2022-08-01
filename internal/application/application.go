@@ -2,6 +2,7 @@ package application
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -11,6 +12,7 @@ import (
 	users_http "github.com/arturyumaev/shopper-api/internal/domains/user/delivery/http"
 	"github.com/arturyumaev/shopper-api/models"
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/v4"
 )
 
 type IApplication interface {
@@ -22,6 +24,8 @@ type application struct {
 }
 
 func (app *application) Run() error {
+	initDatabase()
+
 	router := gin.Default()
 	router.Use(
 		gin.Recovery(),
@@ -59,6 +63,22 @@ func (app *application) Run() error {
 	defer shutdown()
 
 	return httpServer.Shutdown(ctx)
+}
+
+func initDatabase() {
+	POSTGRES_USER := os.Getenv("POSTGRES_USER")
+	POSTGRES_PASSWORD := os.Getenv("POSTGRES_PASSWORD")
+	POSTGRES_HOST := os.Getenv("POSTGRES_HOST")
+	POSTGRES_DB := os.Getenv("POSTGRES_DB")
+
+	dbString := fmt.Sprintf("postgres://%s:%s@%s:5432/%s", POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_DB)
+
+	conn, err := pgx.Connect(context.Background(), dbString)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
+		os.Exit(1)
+	}
+	defer conn.Close(context.Background())
 }
 
 func NewApplication(config *models.Config) IApplication {
