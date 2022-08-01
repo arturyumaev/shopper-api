@@ -18,6 +18,7 @@ spec:
       containers:
         - name: shopper-api
           image: arturyumaev/public:shopper-api
+          imagePullPolicy: "Always"
           ports:
             - containerPort: 8080
           envFrom:
