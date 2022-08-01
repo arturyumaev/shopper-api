@@ -20,3 +20,6 @@ spec:
           image: arturyumaev/public:shopper-api
           ports:
             - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: postgres-config-map
