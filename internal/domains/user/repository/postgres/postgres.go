@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	"errors"
 
 	"github.com/arturyumaev/shopper-api/internal/domains/user"
 	"github.com/arturyumaev/shopper-api/internal/domains/user/queries"
@@ -14,14 +15,26 @@ type repository struct {
 	db *pgx.Conn
 }
 
-func (repo *repository) CreateUser(ctx context.Context, user *models.User) error {
+func (repo *repository) CreateUser(ctx context.Context, user *models.User) (*models.User, error) {
 	user.ID = uuid.New().String()
 	_, err := repo.db.Exec(ctx, queries.CreateUser, user.ID, user.Username, user.Email, user.Password)
-	return err
+	return user, err
 }
 
 func (repo *repository) GetUser(ctx context.Context, userId string) (*models.User, error) {
-	return nil, nil
+	user := &models.User{}
+
+	err := repo.db.QueryRow(ctx, queries.SelectUser, userId).Scan(
+		&user.ID,
+		&user.Username,
+		&user.Password,
+		&user.Email,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }
 
 func (repo *repository) GetUsers(ctx context.Context) ([]*models.User, error) {
@@ -31,7 +44,7 @@ func (repo *repository) GetUsers(ctx context.Context) ([]*models.User, error) {
 	}
 	defer rows.Close()
 
-	var users []*models.User
+	var users = make([]*models.User, 0)
 
 	for rows.Next() {
 		user := &models.User{}
@@ -48,11 +61,21 @@ func (repo *repository) GetUsers(ctx context.Context) ([]*models.User, error) {
 	return users, nil
 }
 
-func (repo *repository) UpdateUser(ctx context.Context, user *models.User) error {
-	return nil
+func (repo *repository) UpdateUser(ctx context.Context, userId string, user *models.User) error {
+	_, err := repo.db.Exec(ctx, queries.UpdateUser, userId, userId, user.Username, user.Email, user.Password)
+	return err
 }
 
 func (repo *repository) DeleteUser(ctx context.Context, userId string) error {
+	result, err := repo.db.Exec(ctx, queries.DeleteUser, userId)
+	if err != nil {
+		return err
+	}
+
+	if result.RowsAffected() == 0 {
+		return errors.New("wrong id")
+	}
+
 	return nil
 }
 
