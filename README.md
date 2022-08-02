@@ -2,14 +2,14 @@
 
 ___
 
-* 🇬🇧 [English version](www.github.com/arturyumaev/shopper-api/README.md)
-* 🇷🇺 [Russian version](www.github.com/arturyumaev/shopper-api/README_rus.md)
+* 🇬🇧 [English version](https://www.github.com/arturyumaev/shopper-api/README.md)
+* 🇷🇺 [Russian version](https://www.github.com/arturyumaev/shopper-api/README_rus.md)
 
 ___
 
 ## Run project in **kubernetes** cluster
 
-[Root repository](www.github.com/arturyumaev/shopper)
+[Root repository](https://www.github.com/arturyumaev/shopper)
 
 ## Run application locally
 

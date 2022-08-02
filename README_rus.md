@@ -2,14 +2,14 @@
 
 ___
 
-* 🇬🇧 [English version](www.github.com/arturyumaev/shopper-api/README.md)
-* 🇷🇺 [Russian version](www.github.com/arturyumaev/shopper-api/README_rus.md)
+* 🇬🇧 [English version](https://www.github.com/arturyumaev/shopper-api/README.md)
+* 🇷🇺 [Russian version](https://www.github.com/arturyumaev/shopper-api/README_rus.md)
 
 ___
 
 ## Запуск проекта в **kubernetes** кластере
 
-[Ссылка на корневой репозиторий](www.github.com/arturyumaev/shopper)
+[Ссылка на корневой репозиторий](https://www.github.com/arturyumaev/shopper)
 
 ## Запуск приложения локально
 
