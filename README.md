@@ -1,48 +1,40 @@
-# shopper-api
+## **shopper-api** microservice
 
-### Запуск приложения локально
+___
+
+* 🇬🇧 [English version](www.github.com/arturyumaev/shopper-api/README.md)
+* 🇷🇺 [Russian version](www.github.com/arturyumaev/shopper-api/README_rus.md)
+
+___
+
+## Run project in **kubernetes** cluster
+
+[Root repository](www.github.com/arturyumaev/shopper)
+
+## Run application locally
+
+To run application locally environment variables must be set. They specify connection to postgres database.
+
+```
+POSTGRES_USER=<user>
+POSTGRES_PASSWORD=<password>
+POSTGRES_HOST=localhost
+POSTGRES_DB=<database>
+```
+
+Then run
 
 ```shell
 ./run_local.sh
 ```
 
-### Сборка в kubernetes кластере
-
-Для запуска на MacOS с драйвером `virtualbox` я использовал [minikube](https://minikube.sigs.k8s.io/docs/start/) и [virtualbox](https://www.virtualbox.org/wiki/Downloads).
-
-Установить [helm](https://helm.sh/), если он не был установлен. Запустить minikube с драйвером `virtualbox` командой
-
-```shell
-minikube start --memory=4096 --driver=virtualbox
-```
-
-### Загрузка манифестов и запуск приложения в кластере
-
-Перейти в директорию `./k8s/` и запустить скрипт
-
-```shell
-cd ./k8s && ./apply.sh
-```
-
-Получить `ip` кластера в `minikube`:
-
-```shell
-minikube ip
-```
-
-После получения `ip` добавить следующую строчку в конец файла `/etc/hosts/` (`<ip>` заменить на полученный `ip`):
-
-```shell
-<ip> arch.homework
-```
-
-Проверить доступность сервиса:
+Check service availability:
 
 ```shell
 curl arch.homework/health
 ```
 
-### Полезные ссылки
+## Usefull links
 
 https://kubernetes.github.io/ingress-nginx/
 
