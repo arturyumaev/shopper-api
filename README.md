@@ -1,4 +1,4 @@
-## **shopper-api** microservice
+## shopper-api microservice
 
 ___
 
@@ -7,11 +7,11 @@ ___
 
 ___
 
-## Run project in **kubernetes** cluster
+#### Run project in **kubernetes** cluster
 
 [Root repository](https://www.github.com/arturyumaev/shopper)
 
-## Run application locally
+#### Run application locally
 
 To run application locally environment variables must be set. They specify connection to postgres database.
 
@@ -34,9 +34,8 @@ Check service availability:
 curl arch.homework/health
 ```
 
-## Usefull links
+#### Usefull links
 
-https://kubernetes.github.io/ingress-nginx/
-
-https://kubernetes.github.io/ingress-nginx/user-guide/basic-usage/
+- https://kubernetes.github.io/ingress-nginx/
+- https://kubernetes.github.io/ingress-nginx/user-guide/basic-usage/
 
