@@ -1,17 +1,15 @@
-## shopper-api microservice
-
-___
+# shopper-api microservice
 
 * 🇬🇧 [English version](https://www.github.com/arturyumaev/shopper-api/blob/main/README.md)
 * 🇷🇺 [Russian version](https://www.github.com/arturyumaev/shopper-api/blob/main/README_rus.md)
 
 ___
 
-#### Запуск проекта в **kubernetes** кластере
+## Запуск проекта в **kubernetes** кластере
 
 [Ссылка на корневой репозиторий](https://www.github.com/arturyumaev/shopper)
 
-#### Запуск приложения локально
+## Запуск приложения локально
 
 Для запуска приложения локально должны бытьу становлены переменные окружение. Они устанавливают параметры подключения к базе данных postgres.
 
@@ -34,7 +32,7 @@ POSTGRES_DB=<database>
 curl localhost:8080/health
 ```
 
-#### Полезные ссылки
+## Полезные ссылки
 
 - https://kubernetes.github.io/ingress-nginx/
 - https://kubernetes.github.io/ingress-nginx/user-guide/basic-usage/
