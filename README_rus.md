@@ -2,8 +2,8 @@
 
 ___
 
-* 🇬🇧 [English version](https://www.github.com/arturyumaev/shopper-api/README.md)
-* 🇷🇺 [Russian version](https://www.github.com/arturyumaev/shopper-api/README_rus.md)
+* 🇬🇧 [English version](https://www.github.com/arturyumaev/shopper-api/blob/main/README.md)
+* 🇷🇺 [Russian version](https://www.github.com/arturyumaev/shopper-api/blob/main/README_rus.md)
 
 ___
 
