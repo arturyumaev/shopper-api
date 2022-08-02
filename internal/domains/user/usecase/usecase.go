@@ -2,6 +2,8 @@ package usecase
 
 import (
 	"context"
+	"errors"
+
 	"github.com/arturyumaev/shopper-api/internal/domains/user"
 	"github.com/arturyumaev/shopper-api/models"
 )
@@ -11,7 +13,20 @@ type useCase struct {
 }
 
 func (uc *useCase) CreateUser(ctx context.Context, user *models.User) error {
-	return nil
+	if user.Username == "" {
+		return errors.New("username cannot be empty")
+	}
+
+	if user.Email == "" {
+		return errors.New("email cannot be empty")
+	}
+
+	if user.Password == "" {
+		return errors.New("password cannot be empty")
+	}
+
+	err := uc.repository.CreateUser(ctx, user)
+	return err
 }
 
 func (uc *useCase) GetUser(ctx context.Context, userId string) (*models.User, error) {
@@ -19,7 +34,12 @@ func (uc *useCase) GetUser(ctx context.Context, userId string) (*models.User, er
 }
 
 func (uc *useCase) GetUsers(ctx context.Context) ([]*models.User, error) {
-	return nil, nil
+	users, err := uc.repository.GetUsers(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return users, nil
 }
 
 func (uc *useCase) UpdateUser(ctx context.Context, user *models.User) error {

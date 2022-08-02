@@ -3,15 +3,17 @@ package application
 import (
 	"context"
 	"fmt"
-	"github.com/arturyumaev/shopper-api/internal/domains/user"
-	userHttp "github.com/arturyumaev/shopper-api/internal/domains/user/delivery/http"
-	userRepo "github.com/arturyumaev/shopper-api/internal/domains/user/repository/postgres"
-	userUC "github.com/arturyumaev/shopper-api/internal/domains/user/usecase"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
+
+	"github.com/arturyumaev/shopper-api/internal/domains/user"
+	userHttp "github.com/arturyumaev/shopper-api/internal/domains/user/delivery/http"
+	userRepo "github.com/arturyumaev/shopper-api/internal/domains/user/repository/postgres"
+	userUC "github.com/arturyumaev/shopper-api/internal/domains/user/usecase"
+	logrus "github.com/sirupsen/logrus"
 
 	"github.com/arturyumaev/shopper-api/models"
 	"github.com/gin-gonic/gin"
@@ -23,13 +25,16 @@ type IApplication interface {
 }
 
 type application struct {
-	httpServer *http.Server
-	config     *models.Config
+	httpServer  *http.Server
+	config      *models.Config
+	closeDBConn func()
 
 	userUC user.UseCase
 }
 
 func (app *application) Run() error {
+	defer app.closeDBConn()
+
 	go func() {
 		if err := app.httpServer.ListenAndServe(); err != nil {
 			log.Fatalf("failed to listen and serve: %+v", err)
@@ -57,19 +62,27 @@ func initPostgresDatabase() *pgx.Conn {
 
 	dbString := fmt.Sprintf("postgres://%s:%s@%s:5432/%s", POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_DB)
 
-	conn, err := pgx.Connect(context.Background(), dbString)
+	db, err := pgx.Connect(context.Background(), dbString)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
 		os.Exit(1)
 	}
 	fmt.Printf("Successfully connected to database: %v\n", dbString)
-	defer conn.Close(context.Background())
 
-	return conn
+	return db
+}
+
+func initLogger() {
+	logrus.SetOutput(os.Stdout)
 }
 
 func NewApplication(config *models.Config) IApplication {
-	conn := initPostgresDatabase()
+	db := initPostgresDatabase()
+	closeDBConn := func() {
+		db.Close(context.Background())
+	}
+
+	initLogger()
 
 	router := gin.Default()
 	router.Use(
@@ -83,7 +96,7 @@ func NewApplication(config *models.Config) IApplication {
 		})
 	})
 
-	userRepository := userRepo.NewRepository(conn)
+	userRepository := userRepo.NewRepository(db)
 	userUseCase := userUC.NewUseCase(userRepository)
 	userHttp.RegisterHTTPEndpoints(router, userUseCase)
 
@@ -98,6 +111,7 @@ func NewApplication(config *models.Config) IApplication {
 	return &application{
 		httpServer,
 		config,
+		closeDBConn,
 		userUseCase,
 	}
 }
