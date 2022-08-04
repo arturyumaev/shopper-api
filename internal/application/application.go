@@ -9,15 +9,20 @@ import (
 	"os/signal"
 	"time"
 
+	// user
 	"github.com/arturyumaev/shopper-api/internal/domains/user"
 	userHttp "github.com/arturyumaev/shopper-api/internal/domains/user/delivery/http"
 	userRepo "github.com/arturyumaev/shopper-api/internal/domains/user/repository/postgres"
 	userUC "github.com/arturyumaev/shopper-api/internal/domains/user/usecase"
-	logrus "github.com/sirupsen/logrus"
+
+	// auth
+	authHttp "github.com/arturyumaev/shopper-api/internal/domains/auth/delivery/http"
+	authUC "github.com/arturyumaev/shopper-api/internal/domains/auth/usecase"
 
 	"github.com/arturyumaev/shopper-api/models"
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v4"
+	"github.com/sirupsen/logrus"
 )
 
 type IApplication interface {
@@ -96,6 +101,11 @@ func NewApplication(config *models.Config) IApplication {
 		})
 	})
 
+	// auth
+	authUseCase := authUC.NewUseCase()
+	authHttp.RegisterHTTPEndpoints(router, authUseCase)
+
+	// user
 	userRepository := userRepo.NewRepository(db)
 	userUseCase := userUC.NewUseCase(userRepository)
 	userHttp.RegisterHTTPEndpoints(router, userUseCase)
